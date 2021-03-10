@@ -1,7 +1,7 @@
 #include <PID_v1.h>
  
-#define PIN_INPUT 0
-#define PIN_OUTPUT 3
+//#define PIN_INPUT 0
+#define ThrottlePin 11
  
 //Define Variables we'll be connecting to
 double Setpoint, Input, Output;
@@ -32,14 +32,14 @@ void setup()
   delay(20);
   */
 
-pinMode(11, OUTPUT); //designating pin 11 as analog output for controlling throttle of motor (0-5V possible, limited to 0-2.5V)
+pinMode(ThrottlePin, OUTPUT); //designating pin 11 as analog output for controlling throttle of motor (0-5V possible, limited to 0-2.5V)
   
   // Call this function if you need to get the IMU error values for your module
 //  calculate_IMU_error();
 //  delay(20);
 
  //initialize the variables we're linked to
- Input = analogRead(PIN_INPUT);
+ Input = roll; //analogRead(PIN_INPUT); //we're using the roll gyro as our input measurement
  Setpoint = 0; //our setpoint will be the change in angle, we want there to be no change
  
  //turn the PID on
