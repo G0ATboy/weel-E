@@ -33,10 +33,9 @@ void setup() {
   delay(20);
   */
 
-pinMode(11, OUTPUT); //designating pin 11 as analog output for controlling throttle of motor (0-5V possible, limited to 0-2.5V)
+  pinMode(11, OUTPUT); //designating pin 11 as analog output for controlling throttle of motor (0-5V possible, limited to 0-2.5V)
 
-  
-  // Call this function if you need to get the IMU error values for your module
+  // Call this function to get the IMU error values for module
   calculate_IMU_error();
   delay(20);
 }
@@ -65,9 +64,9 @@ void loop() {
   GyroY = (Wire.read() << 8 | Wire.read()) / 131.0;
   GyroZ = (Wire.read() << 8 | Wire.read()) / 131.0;
   // Correct the outputs with the calculated error values
-  GyroX = GyroX + 0.56; // GyroErrorX ~(-0.56)
-  GyroY = GyroY - 2; // GyroErrorY ~(2)
-  GyroZ = GyroZ + 0.79; // GyroErrorZ ~ (-0.8)
+  GyroX = GyroX + 2.99; // ~ GyroErrorX based on calculation at end of script
+  GyroY = GyroY - 1.78; // ~ GyroErrorY based on calculation at end of script
+  GyroZ = GyroZ + 0.29; // ~ GyroErrorZ based on calculation at end of script
   // Currently the raw values are in degrees per seconds, deg/s, so we need to multiply by sendonds (s) to get the angle in degrees
   gyroAngleX = gyroAngleX + GyroX * elapsedTime; // deg/s * s = deg
   gyroAngleY = gyroAngleY + GyroY * elapsedTime;
