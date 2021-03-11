@@ -12,7 +12,7 @@ float AccErrorX, AccErrorY, GyroErrorX, GyroErrorY, GyroErrorZ;
 float elapsedTime, currentTime, previousTime;
 int c = 0;
 void setup() {
-  Serial.begin(19200);
+  Serial.begin(9600); //19200 usually
   Wire.begin();                      // Initialize comunication
   Wire.beginTransmission(MPU);       // Start communication with MPU6050 // MPU=0x68
   Wire.write(0x6B);                  // Talk to the register 6B
@@ -60,9 +60,9 @@ void loop() {
   GyroY = (Wire.read() << 8 | Wire.read()) / 131.0;
   GyroZ = (Wire.read() << 8 | Wire.read()) / 131.0;
   // Correct the outputs with the calculated error values
-  GyroX = GyroX + 0.56; // GyroErrorX ~(-0.56) based on calculation at end of script
-  GyroY = GyroY - 2; // GyroErrorY ~(2)  based on calculation at end of script
-  GyroZ = GyroZ + 0.79; // GyroErrorZ ~ (-0.8) based on calculation at end of script
+  GyroX = GyroX + 2.99; // GyroErrorX ~(-2.99) based on calculation at end of script
+  GyroY = GyroY - 1.78; // GyroErrorY ~(1.78)  based on calculation at end of script
+  GyroZ = GyroZ + 0.29; // GyroErrorZ ~ (-0.29) based on calculation at end of script
   // Currently the raw values are in degrees per seconds, deg/s, so we need to multiply by seconds (s) to get the angle in degrees
   gyroAngleX = gyroAngleX + GyroX * elapsedTime; // deg/s * s = deg
   gyroAngleY = gyroAngleY + GyroY * elapsedTime;
@@ -72,48 +72,48 @@ void loop() {
   pitch = 0.96 * gyroAngleY + 0.04 * accAngleY;
   
   // Print acceleration (adjusted for a range of +-2g) on the serial monitor (m/s)
-  Serial.print("AccX: ");
-  Serial.print(AccX);
-  Serial.print("/");
-  Serial.print("AccY: ");
-  Serial.print(AccY);
-  Serial.print("/");
-  Serial.print("AccZ: ");
-  Serial.print(AccZ);  
-  Serial.println("/");
- // Print calculated Pitch and Roll (using raw 3D acceleration data) on the serial monitor
-  Serial.print("AccAngleX: ");
-  Serial.print(accAngleX);
-  Serial.print("/");
-  Serial.print("AccAngleY: ");
-  Serial.print(accAngleY);
-  Serial.println("/");
+//  Serial.print("AccX: ");
+//  Serial.print(AccX);
+//  Serial.print("/");
+//  Serial.print("AccY: ");
+//  Serial.print(AccY);
+//  Serial.print("/");
+//  Serial.print("AccZ: ");
+//  Serial.print(AccZ);  
+//  Serial.println("/");
+// // Print calculated Pitch and Roll (using raw 3D acceleration data) on the serial monitor
+//  Serial.print("AccAngleX: ");
+//  Serial.print(accAngleX);
+//  Serial.print("/");
+//  Serial.print("AccAngleY: ");
+//  Serial.print(accAngleY);
+//  Serial.println("/");
   // Print Gyro (adjusted for 250deg/s range with calculated error removed) on the serial monitor (deg/s)
   Serial.print("GyroX: ");
   Serial.print(GyroX);
-  Serial.print("/");
-  Serial.print("GyroY: ");
-  Serial.print(GyroY);
-  Serial.print("/");
-  Serial.print("GyroZ: ");
-  Serial.print(GyroZ);  
-  Serial.println("/");
+  Serial.print(" / ");
+//  Serial.print("GyroY: ");
+//  Serial.print(GyroY);
+//  Serial.print("/");
+//  Serial.print("GyroZ: ");
+//  Serial.print(GyroZ);  
+//  Serial.print("/");
   // Print Calculated Angles (using Gyro data) on the serial monitor (degrees)
   Serial.print("GyroAngleX: ");
   Serial.print(gyroAngleX);
-  Serial.print("/");
-  Serial.print("GyroAngleY: ");
-  Serial.print(gyroAngleY);
-  Serial.println("/");
+  Serial.print(" / ");
+//  Serial.print("GyroAngleY: ");
+//  Serial.print(gyroAngleY);
+//  Serial.println("/");
   // Print Calculated Angles (using Gyro and Accelerometer data) on the serial monitor (degrees)
   Serial.print("Roll: ");
-  Serial.print(roll);
-  Serial.print("/");
-  Serial.print("Pitch: ");
-  Serial.print(pitch);
-  Serial.print("/");
-  Serial.print("Yaw: ");
-  Serial.println(yaw);
+  Serial.println(roll);
+//  Serial.print("/");
+//  Serial.print("Pitch: ");
+//  Serial.print(pitch);
+//  Serial.print("/");
+//  Serial.print("Yaw: ");
+//  Serial.println(yaw);
 }
 void calculate_IMU_error() {
   // We can call this funtion in the setup section to calculate the accelerometer and gyro data error. From here we will get the error values used in the above equations printed on the Serial Monitor.
