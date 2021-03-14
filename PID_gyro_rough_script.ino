@@ -1,3 +1,6 @@
+//https://kellycontroller.com/wp-content/uploads/kvd/KellyKVDNUserManualV1.12.pdf
+//for information on ESC Kelly Controller manual for programming controller software response
+
 #include <PID_v1.h>
 #include <Wire.h>
 
