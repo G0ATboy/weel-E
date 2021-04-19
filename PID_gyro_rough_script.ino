@@ -22,7 +22,7 @@ int c = 0;
 double Setpoint, Input, Output;
  
 //Specify the links and initial tuning parameters
-double Kp=2, Ki=5, Kd=1;
+double Kp=1, Ki=1, Kd=1;
 PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
  
 void setup()
@@ -54,11 +54,15 @@ void setup()
   delay(20);
 
   //initialize the variables we're linked to
-  Input = GyroX; //analogRead(PIN_INPUT); //we're using the roll gyro as our input measurement
-  Setpoint = 0; //our setpoint will be the change in angle, we want there to be no change
+  Input = GyroX; //analogRead(PIN_INPUT); //we're using the roll gyro as our input measurement to control the PID loop by
+  Setpoint = 0; //our setpoint will be the change in angle, we want there to be no change, aka. 0
    /*^ considering the error in GyroX might not always be EXACTLY the same (therefor never perfectly subtracting the error from the reading)
        I could have the Setpoint = one of the first GyroX values recorded (assuming it's stationary while being powered on)
        this would save a little time instead of having to calculate the error (though it may only be milliseconds...)
+       This would also assume that the rig is perfectly stationary during startup (which it might not be because of subtle movements),
+       The controlled calculation of the error would be a good start, but if the error has drifted over time, then it may get worse,
+       but as long as the error isn't actively changing throughout, then it really doesn't matter, because the gyro will only register a changing value,
+       and respond appropriately to make that change 0.
    */
   //turn the PID on
   myPID.SetMode(AUTOMATIC);
@@ -93,7 +97,7 @@ void loop()
   GyroX = GyroX + 2.99; // ~ GyroErrorX based on calculation at end of script
   GyroY = GyroY - 1.78; // ~ GyroErrorY based on calculation at end of script
   GyroZ = GyroZ + 0.29; // ~ GyroErrorZ based on calculation at end of script
-  // Currently the raw values are in degrees per seconds, deg/s, so we need to multiply by sendonds (s) to get the angle in degrees
+  // Currently the raw values are in degrees per seconds, deg/s, so we need to multiply by seconds (s) to get the angle in degrees
   gyroAngleX = gyroAngleX + GyroX * elapsedTime; // deg/s * s = deg
   gyroAngleY = gyroAngleY + GyroY * elapsedTime;
   yaw =  yaw + GyroZ * elapsedTime;
@@ -170,4 +174,5 @@ void calculate_IMU_error()
   Serial.println(GyroErrorY);
   Serial.print("GyroErrorZ: ");
   Serial.println(GyroErrorZ);
+ // the above error calculations are currently only for debugging purposes 
 }
